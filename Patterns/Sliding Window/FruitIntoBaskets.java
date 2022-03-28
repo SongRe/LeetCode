@@ -25,7 +25,7 @@ public class FruitIntoBaskets {
                             if(basket.size() == 1)
                                 break;
                         }
-                    }
+                    }       
                     basket.put(fruits[right], 1);
                 }
                 else
