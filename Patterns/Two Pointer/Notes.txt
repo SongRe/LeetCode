@@ -1,0 +1,6 @@
+strategies
+- using pointers to keep track of where things need to be placed in an array
+    - RemoveElement, RemoveDuplicatesFromSortedArray as exmaples where we used a pointer that started at 0 and incremented when we put an element at the right spot
+- Using pointers to fixate about a certain point, 
+- Using pointers like a sliding window to change the window
+- Using hashmaps and conditions to adjust said sliding window

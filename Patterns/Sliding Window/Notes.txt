@@ -1,0 +1,8 @@
+Some strategies
+- Left and right index for window
+- Using maps to keep track of how many of an element we've counted, seen...etc and changing the window size accordingly
+    - In Substring with concat of words, we have two hashmaps that keep track of how many words we need to use and their respective counts, and how many words we've seen so far
+- Loading values into hashmaps to start (for example, how many of each character or word we need in our window)
+- Removing values from these hashmaps as our window shrinks, etc (by increasing the left pointer)
+
+
