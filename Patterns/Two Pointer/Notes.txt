@@ -4,3 +4,5 @@ strategies
 - Using pointers to fixate about a certain point, 
 - Using pointers like a sliding window to change the window
 - Using hashmaps and conditions to adjust said sliding window
+- A lot of problems have what you're looking for reflected in the size of the sliding window (subarray less than product k, ...etc)
+- Can have leading pointers and slow pointers
