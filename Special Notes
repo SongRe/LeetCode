@@ -1,0 +1,4 @@
+Binary Search:
+-
+
+- When calculating mid, make sure its left + (right - left) / 2 instead of (l + r) / 2, to avoid overflow bugs
