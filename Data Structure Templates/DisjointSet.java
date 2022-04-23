@@ -17,7 +17,9 @@ public class DisjointSet {
         if (x == root[x]) {
             return x;
         }
-        return root[x] = find(root[x]);
+        return root[x] = find(root[x]); 
+        // path compression optimization
+        // return find(root[x]) will be normal, unoptimized. THere will be recalculations
     }
 
     public void union (int x, int y) {
