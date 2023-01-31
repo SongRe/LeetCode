@@ -477,3 +477,118 @@ class Solution:
 ```
 Idea: keep track of curEnd (ie, max we can go to), keep iterating through points until the start is greater than the end, then "pop" those balloons, (increment result) and update endpoint
 - Greedy algorithm
+
+
+## maxsubarraySumCircular
+```python
+class Solution:
+    def maxSubarraySumCircular(self, nums: List[int]) -> int:
+        Sum = sum(nums)
+        res = nums[0]
+        maxSub = nums[0]
+        minSub = 0
+        for i in range(1,len(nums)):
+            maxSub = max(maxSub+nums[i], nums[i])
+            minSub = min(minSub+nums[i], nums[i])
+            res = max(res, maxSub, Sum - minSub)
+        return res
+```
+DP approach, we think about two things: the maximum subarray normally, and the maximum subarray only circular, where we connect the end to the beginning of the array. Our answer is the maximum of these two. 
+
+The first problem can be solved using DP, for the ith element in nums, we either (1) add it to the end of the subarray ending with i-1 element, or (2) we start a new subarray from i.
+
+Base case: For the first element in nums, the maximum non-empty subarray is nums[0].
+DP equation: dp[i] = max(dp[i-1]+nums[i], nums[i])
+The second problem can be view as to find the minimum sum subarray in nums without the circular property. What this means is if the maximum subarray is formed by connecting the end to the beginning of the array, we can compute it with sum(nums) - minimum subarray.
+
+So we can use the same dp algorithm as for problem 1, but try to find the minimum subarray.
+
+Base case: Since the subarray is non-empty , our base case is dp[0] = 0, means at least the first element should be included in the answer.
+DP equation: dp[i] = min(dp[i-1]+nums[i], nums[i])
+
+
+
+
+## Subarray sums divisible by k
+https://leetcode.com/problems/subarray-sums-divisible-by-k/description/
+
+Premise: keep track of a prefix sum array that stores the prefix sum modulo k. 
+- We will find that if prefix[i] == prefix[j], then the array from indices (i + 1 ... j) is divisible by k. 
+- prefix [i] = (arr[0] + arr[1] + ... + arr[i] % k).
+
+
+```python
+class Solution:
+    def subarraysDivByK(self, nums: list[int], k: int) -> int:
+        prefixMod, result = 0, 0
+
+        modGroups = [0] * k
+        modGroups[0] = 1
+
+        for num in nums:
+            prefixMod = (prefixMod + num) % k
+            result += modGroups[prefixMod]
+            modGroups[prefixMod] += 1
+
+        return result
+```
+
+## Best team with no conflicts
+https://leetcode.com/problems/best-team-with-no-conflicts/
+
+
+```Java
+class Solution {
+    public int bestTeamScore(int[] scores, int[] ages) {
+        final int n = ages.length;
+        int[][] ageScorePair = new int[n][2];
+
+        for (int i = 0; i < n; i++) {
+            ageScorePair[i][0] = ages[i];
+            ageScorePair[i][1] = scores[i];
+        }
+
+        // Sort in ascending order of age and then by score.
+        Arrays.sort(ageScorePair, (a,b) -> a[0] == b[0] ? a[1]-b[1] : a[0]-b[0]);
+        // Initially, all states are null, denoting not yet calculated.
+        Integer[][] dp = new Integer[n][n];
+
+        return findMaxScore(dp, ageScorePair, -1, 0);
+    }
+
+    private int findMaxScore(Integer[][] dp, int[][] ageScorePair, int prev, int index) {
+        // Return 0 if we have iterated over all the players.
+        if (index >= ageScorePair.length) {
+            return 0;
+        }
+
+        // We have already calculated the answer, so no need to go into recursion.
+        if (dp[prev + 1][index] != null) {
+            return dp[prev + 1][index];
+        }
+
+        // If we can add this player, return the maximum of two choices we have.
+        if (prev == -1 || ageScorePair[index][1] >= ageScorePair[prev][1]) {
+            return dp[prev + 1][index] = Math.max(findMaxScore(dp, ageScorePair, prev, index + 1),
+                    ageScorePair[index][1] + findMaxScore(dp, ageScorePair, index, index + 1));
+        }
+
+        // This player cannot be added; return the corresponding score.
+        return dp[prev + 1][index] = findMaxScore(dp, ageScorePair, prev, index + 1);
+    }
+
+}
+```
+Store the ages and scores of all the players in the list ageScorePair.
+
+Sort the list ageScorePair in ascending order of age and then in ascending order of score.
+
+Iterate over the players; start with index = 0 and prev = -1, as we haven't chosen any player yet.
+
+If it's the first player (prev = -1) or the player's score at index is more than the score of the player at index prev. Then we can add this player, and the score will be the maximum of the two choices we have.
+
+If we add this player, we will add the score, and the value of prev will be the current index index, and move on to the next player, i.e., index + 1.
+If we don't add this player, the value of prev won't change and move on to the next player.
+If the above two conditions are not satisfied, we only have the option to leave this player and move on to the next one.
+
+Base condition: If we have iterated over all the players, we should return 0.
